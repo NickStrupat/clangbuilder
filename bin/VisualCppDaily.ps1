@@ -11,7 +11,7 @@ $VisualCppDailyVersion = $null
 
 try {
     $queryurl = $null
-    $obj = (Invoke-WebRequest -Uri $VisualCppDailyAPI).Content |ConvertFrom-Json
+    $obj = (Invoke-WebRequest -Uri $VisualCppDailyAPI).Content  -UseBasicParsing |ConvertFrom-Json
     foreach ($s in $obj.resources) {
         if ($s.'@type' -eq "SearchQueryService") {
             $queryurl = $s.'@id'
@@ -22,7 +22,7 @@ try {
         exit 1
     }
     $surl = "$queryurl/?q=packageid:$VisualCppDailyName&prerelease=true"
-    $vcobj = (Invoke-WebRequest -Uri $surl).Content |ConvertFrom-Json
+    $vcobj = (Invoke-WebRequest -Uri $surl).Content  -UseBasicParsing |ConvertFrom-Json
     if ($vcobj.data -is [array]) {
         $VisualCppDailyVersion = $vcobj.data[0].version
     }
